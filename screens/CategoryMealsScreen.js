@@ -1,16 +1,20 @@
 import React from 'react';
-import { CATEGORIES, MEALS } from '../data/dummy-data';
+import { useSelector } from 'react-redux';
+
+import { CATEGORIES } from '../data/dummy-data';
 import MealList from '../components/MealList';
 
 const CategoryMealsScreen = (props) => {
   const catId = props.navigation.getParam('categoryId');
-  const displayedMeals = MEALS.filter(
+
+  const availableMeals = useSelector((state) => state.meals.filteredMeals);
+
+  const displayedMeals = availableMeals.filter(
     (meal) => meal.categoryIds.indexOf(catId) >= 0
   );
 
   // routeName points to the objects defined in MealsNavigator.js
   // has to be in quotations or else JS will look for the variable CategoryMeals
-
   return <MealList listData={displayedMeals} navigation={props.navigation} />;
 };
 
