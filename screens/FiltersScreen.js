@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, Text, View, Switch, Platform } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import { useDispatch } from 'react-redux';
+
 import CustomHeaderButton from '../components/HeaderButton';
 import Colors from '../constants/Colors';
+import { setFilters } from '../store/actions/meals';
 
 const FilterSwitch = (props) => {
   return (
@@ -26,6 +29,8 @@ const FiltersScreen = (props) => {
   const [isVegetarian, setIsVegetarian] = useState(false);
   const [isVegan, setIsVegan] = useState(false);
 
+  const dispatch = useDispatch();
+
   // useCallback is often used in conjunction with useEffect() b/c it allows you to prevent the re-creation of a function (since func are just objects in JS)
   // Therefore, if you have a func A inside func B, the inner func A will be recreated (brand new object) whenever func B runs.
   // If the inner func is a dependency of useEffect, then the effect would re-run whenever inner func rebuilds, and if inner func
@@ -38,8 +43,8 @@ const FiltersScreen = (props) => {
       vegan: isVegan,
     };
 
-    console.log(appliedFilters);
-  }, [isGlutenFree, isLactoseFree, isVegetarian, isVegan]); // appliedFilters will be re-created anytime at least one of those filters change
+    dispatch(setFilters(appliedFilters));
+  }, [isGlutenFree, isLactoseFree, isVegetarian, isVegan, dispatch]); // appliedFilters will be re-created anytime at least one of those filters change
 
   // useEffect is a React hook that allows you handle side effects in your functional React components
   // you can use it to do anything that doesn't directly impact your UI/JSX code
